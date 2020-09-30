@@ -2,6 +2,7 @@ version: "3"
 
 services:
     php:
+        container_name: php_73
         build:
             context: ./dev/docker/php
         restart: always
@@ -14,6 +15,7 @@ services:
        #ports:
         #    - "9000:9000"
     nginx:
+        container_name: nginx
         restart: always
         image: nginx:latest
         working_dir: /var/www/html/magento
@@ -26,6 +28,7 @@ services:
         ports:
             - "83:80"
     mysql:
+        container_name: mysql_57
         restart: always
         image: mysql:5.7
         command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
@@ -38,12 +41,14 @@ services:
             - "3306"
   
     redis:
+        container_name: redis
         restart: always
         image: redis
         expose:
             - "6379"
 
     mail-server:
+        container_name: mail_server
         restart: always
         image: mailhog/mailhog
         user: root # Needed if using maildir
@@ -60,7 +65,7 @@ services:
 
     es01:
         image: docker.elastic.co/elasticsearch/elasticsearch:7.4.2
-        container_name: es01
+        container_name: es_74
         environment:
             - node.name=es01
             - cluster.name=es-docker-cluster
@@ -77,6 +82,7 @@ services:
             - 9200:9200
 
     adminer:
+        container_name: adminer
         restart: always
         image: adminer
         volumes:
