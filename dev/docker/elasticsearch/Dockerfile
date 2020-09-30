@@ -1,4 +1,4 @@
-FROM php:7.4-fpm
+FROM php:7.3-fpm
 
 RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
@@ -12,13 +12,13 @@ RUN apt-get update && apt-get install -y \
     --no-install-recommends \
     && rm -r /var/lib/apt/lists/*
 
-#RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/lib \
-#    --with-freetype-dir=/usr/include/freetype2 \
-#    && docker-php-ext-install -j$(nproc) gd
+RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/lib \
+    --with-freetype-dir=/usr/include/freetype2 \
 
-RUN docker-php-ext-configure gd --with-jpeg \
-    --with-freetype \
-    && docker-php-ext-install -j$(nproc) gd
+#for php 7.4
+#RUN docker-php-ext-configure gd --with-jpeg \
+#    --with-freetype \
+#    && docker-php-ext-install -j$(nproc) gd
 
 RUN docker-php-ext-configure intl \
     && docker-php-ext-install -j$(nproc) intl
