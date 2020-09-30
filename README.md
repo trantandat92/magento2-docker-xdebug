@@ -2,11 +2,14 @@
 
 - php 7.3-fpm
 - nginx lasted
-- elastic search
+- elastic search 7.4.2 
 - mysql
 - redis
 - mail-server
 - adminer
+
+# To fix error _max virtual memory areas vm.max_map_count 65530 is too low, increase to at least 262144 elastic search
+https://www.elastic.co/guide/en/elasticsearch/reference/7.x/docker.html#_set_vm_max_map_count_to_at_least_262144
 
 
 # To debug - Setting in PHP Storm:
