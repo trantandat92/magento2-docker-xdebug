@@ -1,0 +1,104 @@
+version: "3"
+
+services:
+    php:
+        build:
+            context: ./dev/docker/php
+        restart: always
+        working_dir: /var/www/html/magento
+        volumes:
+            - ./:/var/www/html/magento
+        
+        expose:
+            - "9000"
+       #ports:
+        #    - "9000:9000"
+    nginx:
+        restart: always
+        image: nginx:latest
+        working_dir: /var/www/html/magento
+        volumes:
+            - ./:/var/www/html/magento
+            - ./dev/docker/nginx/magento2.conf:/etc/nginx/conf.d/default.conf
+        expose:
+            - "80"
+            
+        ports:
+            - "83:80"
+    mysql:
+        restart: always
+        image: mysql:5.7
+        command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+        volumes:
+            - ./dev/docker/mysql/initdb:/docker-entrypoint-initdb.d
+            - ./dev/docker/mysql/data:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+        expose:
+            - "3306"
+  
+    redis:
+        restart: always
+        image: redis
+        expose:
+            - "6379"
+
+    mail-server:
+        restart: always
+        image: mailhog/mailhog
+        user: root # Needed if using maildir
+        environment:
+            MH_STORAGE: maildir
+            MH_MAILDIR_PATH: /var/data/mailhog
+        volumes:
+            - ./dev/docker/data/mailhog:/var/data/mailhog
+        expose:
+            - "1025" # SMTP Server to send mail
+            - "8025" # HTTP Server to check mail
+        ports:
+            - "8022:8025"
+
+    es01:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.4.2
+        container_name: es01
+        environment:
+            - node.name=es01
+            - cluster.name=es-docker-cluster
+            - cluster.initial_master_nodes=es01
+            - bootstrap.memory_lock=true
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        ulimits:
+            memlock:
+              soft: -1
+              hard: -1
+        volumes:
+            - ./dev/docker/elasticsearch/data01:/usr/share/elasticsearch/data
+        ports:
+            - 9200:9200
+
+    adminer:
+        restart: always
+        image: adminer
+        volumes:
+            - ./dev/docker/adminer/php-custom.ini:/usr/local/etc/php/conf.d/php-custom.ini
+        expose:
+            - "8080"
+        ports:
+            - "8088:8080"
+        environment:
+            ADMINER_DEFAULT_SERVER: mysql
+            ADMINER_DESIGN: "pappu687"
+        #  networks:
+        #    dev_magento:
+        #      ipv4_address: 172.16.97.222    
+            
+            
+            
+#networks:
+#  dev_magento:
+#    driver: bridge
+#    ipam:
+#      driver: default
+#      config:
+#        - subnet: 172.16.97.0/24
+            
