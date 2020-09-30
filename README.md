@@ -21,7 +21,9 @@ Docker Desktop WSL 2 backend: running command line in power shell
   Path mappings: 
     File/Directory: path/to/project 
     Absolute path on the server: /var/www/html/magento
-
+- Run | Debug Configurations
+  Add PHP Remote Debug Server
+  IDE Key: PHPSTORM
 # To debug - Update ~dev\docker\php\php-custom.ini
 - Set xdebug.remote_host=your_ip
 
