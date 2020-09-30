@@ -22,6 +22,9 @@ Docker Desktop WSL 2 backend: running command line in power shell
     File/Directory: path/to/project 
     Absolute path on the server: /var/www/html/magento
 
+# To debug - Update ~dev\docker\php\php-custom.ini
+- Set xdebug.remote_host=your_ip
+
 # To install magento 2
 - Clone or download this repo, extract to project folder
 - Docker Up and running:
